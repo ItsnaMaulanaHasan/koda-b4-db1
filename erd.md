@@ -33,6 +33,6 @@ erDiagram
 
     buku }o--|{ kategori : memiliki
     buku }o--|| rak_buku : menempati
-    peminjam }o--o{ buku : meminjam
-    peminjam }o--o| petugas : beratanggung_jawab
+    peminjam }o--|{ buku : meminjam
+    peminjam }|--|| petugas : beratanggung_jawab
 ```
