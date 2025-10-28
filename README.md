@@ -16,14 +16,12 @@ erDiagram
     category{
         int id
         string category_name
-        int bookshelf_id
     }
 
     bookshelf{
         int id
         string bookshelf_name
         int category_id
-        int book_id
     }
 
     librarian{

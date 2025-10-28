@@ -25,20 +25,13 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    category (
-        id SERIAL PRIMARY KEY,
-        category_name VARCHAR(20),
-        bookshelf_id INT,
-        FOREIGN KEY (bookshelf_id) REFERENCES bookshelf (id)
-    );
+    category (id SERIAL PRIMARY KEY, category_name VARCHAR(20));
 
 CREATE TABLE
     bookshelf (
         id SERIAL PRIMARY KEY,
         bookshelf_name VARCHAR(20),
         category_id INT,
-        book_id INT,
-        FOREIGN KEY (book_id) REFERENCES book (id),
         FOREIGN KEY (category_id) REFERENCES category_id (id)
     );
 
