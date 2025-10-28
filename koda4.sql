@@ -1,6 +1,6 @@
 CREATE DATABASE libraries_db OWNER itsnamaulana;
 
-CREATE TABLE✅
+CREATE TABLE
     book (
         id SERIAL PRIMARY KEY,
         title VARCHAR(100),
@@ -10,21 +10,21 @@ CREATE TABLE✅
         FOREIGN KEY (bookshelf_id) REFERENCES bookshelf (id)
     );
 
-CREATE TABLE✅
+CREATE TABLE
     borrower (
         id SERIAL PRIMARY KEY,
         borrower_name VARCHAR(100),
         borrower_address VARCHAR(100)
     );
 
-CREATE TABLE✅
+CREATE TABLE
     librarian (
         id SERIAL PRIMARY KEY,
         librarian_name VARCHAR(100),
         shift CHAR(5)
     );
 
-CREATE TABLE✅
+CREATE TABLE
     category (
         id SERIAL PRIMARY KEY,
         category_name VARCHAR(20),
@@ -32,7 +32,7 @@ CREATE TABLE✅
         FOREIGN KEY (bookshelf_id) REFERENCES bookshelf (id)
     );
 
-CREATE TABLE✅
+CREATE TABLE
     bookshelf (
         id SERIAL PRIMARY KEY,
         bookshelf_name VARCHAR(20),
