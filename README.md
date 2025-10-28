@@ -1,39 +1,61 @@
-# ERD Sistem Perpustakaan
+# ERD Libraries System
 
 ```mermaid
 ---
-    title: Sistem Perpustakaan
+    title: Libraries System
 ---
 erDiagram
-    buku{
-        string judul
+    book{
+        int id
+        string title
         string isbn
-        int stock
+        int bookshelf_id
     }
 
-    kategori{
-        string nama
+    kategory{
+        int id
+        string kategory_name
+        int bookshelf_id
     }
 
-    rak_buku{
-        string no_rak
+    bookshelf{
+        id int
+        string bookshelf_name
+        int kategory_id
+        int book_id
     }
 
-    petugas{
-        string nama
+    librarian{
+        int id
+        string librarian_name
         string shift
-        string jenis_kelamin
     }
 
-    peminjam{
-        string nama
-        int durasi_pinjam
-        string address
+    borrower{
+        int id
+        string borrower_name
+        string borrower_address
     }
 
-    buku }o--|{ kategori : memiliki
-    buku }o--|| rak_buku : menempati
-    peminjam }o--|{ buku : meminjam
-    peminjam }|--|| petugas : bertanggung_jawab
-    rak_buku ||--|{ kategori : memiliki
+    borrowing{
+        int id
+        int loan_duration
+        int book_id
+        int borrower_id
+        int librarian_id
+    }
+
+    book_kategories{
+        int id
+        int book_id
+        int kategory_id
+    }
+
+    librarian ||--|{ borrowing : responsible
+    borrower ||--|{ borrowing : borrow
+    book ||--|{ borrowing : borrowed
+    book ||--|{ book_kategories : own
+    kategory ||--|{ book_kategories : owned
+    book }o--|| bookshelf : occupy
+    bookshelf }o--|| kategory : own
 ```
