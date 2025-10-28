@@ -9,6 +9,7 @@ erDiagram
         int id
         string title
         string isbn
+        int stock
         int bookshelf_id
     }
 
