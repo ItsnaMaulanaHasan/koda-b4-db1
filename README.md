@@ -13,16 +13,16 @@ erDiagram
         int bookshelf_id
     }
 
-    kategory{
+    category{
         int id
-        string kategory_name
+        string category_name
         int bookshelf_id
     }
 
     bookshelf{
-        id int
+        int id
         string bookshelf_name
-        int kategory_id
+        int category_id
         int book_id
     }
 
@@ -46,17 +46,17 @@ erDiagram
         int librarian_id
     }
 
-    book_kategories{
+    book_categories{
         int id
         int book_id
-        int kategory_id
+        int category_id
     }
 
     librarian ||--|{ borrowing : responsible
     borrower ||--|{ borrowing : borrow
     book ||--|{ borrowing : borrowed
-    book ||--|{ book_kategories : own
-    kategory ||--|{ book_kategories : owned
+    book ||--|{ book_categories : own
+    category ||--|{ book_categories : owned
     book }o--|| bookshelf : occupy
-    bookshelf }o--|| kategory : own
+    bookshelf }o--|| category : own
 ```
