@@ -1,15 +1,3 @@
-CREATE DATABASE libraries_db OWNER itsnamaulana;
-
-CREATE TABLE
-    book (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(100),
-        isbn VARCHAR(50),
-        stock INT,
-        bookshelf_id INT,
-        FOREIGN KEY (bookshelf_id) REFERENCES bookshelf (id)
-    );
-
 CREATE TABLE
     borrower (
         id SERIAL PRIMARY KEY,
@@ -33,6 +21,16 @@ CREATE TABLE
         bookshelf_name VARCHAR(20),
         category_id INT,
         FOREIGN KEY (category_id) REFERENCES category (id)
+    );
+
+CREATE TABLE
+    book (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(100),
+        isbn VARCHAR(50),
+        stock INT,
+        bookshelf_id INT,
+        FOREIGN KEY (bookshelf_id) REFERENCES bookshelf (id)
     );
 
 CREATE TABLE
