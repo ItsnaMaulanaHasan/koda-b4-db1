@@ -1,63 +1,78 @@
-CREATE TABLE
-    borrower (
-        id SERIAL PRIMARY KEY,
-        borrower_name VARCHAR(100),
-        borrower_address VARCHAR(100)
-    );
+CREATE TABLE borrowers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    address VARCHAR(100),
+    phone VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INT,
+    updated_by INT
+);
 
-CREATE TABLE
-    librarian (
-        id SERIAL PRIMARY KEY,
-        librarian_name VARCHAR(100),
-        shift CHAR(5)
-    );
+CREATE TABLE librarians (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    shift shift NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INT,
+    updated_by INT
+);
 
-CREATE TABLE
-    category (id SERIAL PRIMARY KEY, category_name VARCHAR(20));
+CREATE TYPE shift AS ENUM ('Pagi', 'Siang', 'Malam');
 
-CREATE TABLE
-    bookshelf (
-        id SERIAL PRIMARY KEY,
-        bookshelf_name VARCHAR(20),
-        category_id INT,
-        FOREIGN KEY (category_id) REFERENCES category (id)
-    );
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INT,
+    updated_by INT
+);
 
-CREATE TABLE
-    book (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(100),
-        isbn VARCHAR(50),
-        stock INT,
-        bookshelf_id INT,
-        FOREIGN KEY (bookshelf_id) REFERENCES bookshelf (id)
-    );
+CREATE TABLE bookshelfs (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category_id INT REFERENCES categories (id)
+);
 
-CREATE TABLE
-    borrowing (
-        id SERIAL PRIMARY KEY,
-        loan_duration INT,
-        book_id INT,
-        borrower_id INT,
-        librarian_id INT,
-        FOREIGN KEY (book_id) REFERENCES book (id),
-        FOREIGN KEY (borrower_id) REFERENCES borrower (id),
-        FOREIGN KEY (librarian_id) REFERENCES librarian (id)
-    );
+CREATE TABLE books (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    isbn VARCHAR(50) NOT NULL,
+    stock INT NOT NULL CHECK (stock > 0),
+    bookshelf_id INT REFERENCES bookshelfs (id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INT,
+    updated_by INT
+);
 
-CREATE TABLE
-    book_categories (
-        id SERIAL PRIMARY KEY,
-        book_id INT,
-        category_id INT,
-        FOREIGN KEY (book_id) REFERENCES book (id),
-        FOREIGN KEY (category_id) REFERENCES category (id)
-    );
+CREATE TABLE borrowing (
+    id SERIAL PRIMARY KEY,
+    loan_duration INT,
+    book_id INT REFERENCES books (id),
+    borrower_id INT REFERENCES borrowers (id),
+    librarian_id INT REFERENCES librarians (id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INT,
+    updated_by INT
+);
+
+CREATE TABLE book_categories (
+    id SERIAL PRIMARY KEY,
+    book_id INT REFERENCES book (id),
+    category_id INT REFERENCES category (id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+    created_by INT,
+    updated_by INT
+);
 
 INSERT INTO
-    category (category_name)
-VALUES
-    ('Fiction'),
+    categories (name)
+VALUES ('Fiction'),
     ('Non-Fiction'),
     ('Science'),
     ('History'),
@@ -71,9 +86,8 @@ VALUES
     ('Thriller');
 
 INSERT INTO
-    bookshelf (bookshelf_name, category_id)
-VALUES
-    ('Shelf A1', 1),
+    bookshelfs (name, category_id)
+VALUES ('Shelf A1', 1),
     ('Shelf A2', 1),
     ('Shelf B1', 2),
     ('Shelf B2', 3),
@@ -87,59 +101,151 @@ VALUES
     ('Shelf F2', 11);
 
 INSERT INTO
-    book (title, isbn, stock, bookshelf_id)
-VALUES
-    ('The Great Gatsby', '978-0-7432-7356-5', 5, 1),
+    books (
+        title,
+        isbn,
+        stock,
+        bookshelf_id
+    )
+VALUES (
+        'The Great Gatsby',
+        '978-0-7432-7356-5',
+        5,
+        1
+    ),
     (
         'To Kill a Mockingbird',
         '978-0-06-112008-4',
         3,
         1
     ),
-    ('1984', '978-0-452-28423-4', 7, 2),
-    ('Pride and Prejudice', '978-0-14-143951-8', 4, 2),
+    (
+        '1984',
+        '978-0-452-28423-4',
+        7,
+        2
+    ),
+    (
+        'Pride and Prejudice',
+        '978-0-14-143951-8',
+        4,
+        2
+    ),
     (
         'The Catcher in the Rye',
         '978-0-316-76948-0',
         6,
         1
     ),
-    ('Animal Farm', '978-0-452-28424-1', 8, 2),
-    ('Brave New World', '978-0-06-085052-4', 5, 3),
-    ('The Hobbit', '978-0-547-92822-7', 10, 11),
+    (
+        'Animal Farm',
+        '978-0-452-28424-1',
+        8,
+        2
+    ),
+    (
+        'Brave New World',
+        '978-0-06-085052-4',
+        5,
+        3
+    ),
+    (
+        'The Hobbit',
+        '978-0-547-92822-7',
+        10,
+        11
+    ),
     (
         'Harry Potter Book 1',
         '978-0-439-70818-8',
         12,
         11
     ),
-    ('Lord of the Rings', '978-0-618-64561-1', 8, 11),
-    ('Sapiens', '978-0-06-231609-7', 6, 3),
-    ('Educated', '978-0-399-59050-4', 5, 4);
+    (
+        'Lord of the Rings',
+        '978-0-618-64561-1',
+        8,
+        11
+    ),
+    (
+        'Sapiens',
+        '978-0-06-231609-7',
+        6,
+        3
+    ),
+    (
+        'Educated',
+        '978-0-399-59050-4',
+        5,
+        4
+    );
 
 INSERT INTO
-    borrower (borrower_name, borrower_address)
-VALUES
-    ('John Doe', 'Jl. Merdeka No. 10, Jakarta'),
-    ('Jane Smith', 'Jl. Sudirman No. 25, Bandung'),
-    ('Michael Johnson', 'Jl. Thamrin No. 5, Surabaya'),
-    ('Emily Davis', 'Jl. Asia Afrika No. 100, Depok'),
-    ('David Wilson', 'Jl. Gatot Subroto No. 15, Bogor'),
-    ('Sarah Brown', 'Jl. Ahmad Yani No. 30, Tangerang'),
-    ('James Taylor', 'Jl. Diponegoro No. 45, Bekasi'),
+    borrowers (name, address, phone)
+VALUES (
+        'John Doe',
+        'Jl. Merdeka No. 10, Jakarta',
+        '0895367608879'
+    ),
+    (
+        'Jane Smith',
+        'Jl. Sudirman No. 25, Bandung',
+        '0895367608879'
+    ),
+    (
+        'Michael Johnson',
+        'Jl. Thamrin No. 5, Surabaya',
+        '0895367608879'
+    ),
+    (
+        'Emily Davis',
+        'Jl. Asia Afrika No. 100, Depok',
+        '0895367608879'
+    ),
+    (
+        'David Wilson',
+        'Jl. Gatot Subroto No. 15, Bogor',
+        '0895367608879'
+    ),
+    (
+        'Sarah Brown',
+        'Jl. Ahmad Yani No. 30, Tangerang',
+        '0895367608879'
+    ),
+    (
+        'James Taylor',
+        'Jl. Diponegoro No. 45, Bekasi',
+        '0895367608879'
+    ),
     (
         'Jessica Anderson',
-        'Jl. Pahlawan No. 20, Yogyakarta'
+        'Jl. Pahlawan No. 20, Yogyakarta',
+        '0895367608879'
     ),
-    ('Daniel Martinez', 'Jl. Pemuda No. 12, Semarang'),
-    ('Amanda Thomas', 'Jl. Veteran No. 8, Malang'),
-    ('Christopher Lee', 'Jl. Cendana No. 17, Denpasar'),
-    ('Ashley White', 'Jl. Melati No. 22, Medan');
+    (
+        'Daniel Martinez',
+        'Jl. Pemuda No. 12, Semarang',
+        '0895367608879'
+    ),
+    (
+        'Amanda Thomas',
+        'Jl. Veteran No. 8, Malang',
+        '0895367608879'
+    ),
+    (
+        'Christopher Lee',
+        'Jl. Cendana No. 17, Denpasar',
+        '0895367608879'
+    ),
+    (
+        'Ashley White',
+        'Jl. Melati No. 22, Medan',
+        '0895367608879'
+    );
 
 INSERT INTO
-    librarian (librarian_name, shift)
-VALUES
-    ('Ahmad Rizki', 'Pagi'),
+    librarians (librarian_name, shift)
+VALUES ('Ahmad Rizki', 'Pagi'),
     ('Siti Nurhaliza', 'Siang'),
     ('Budi Santoso', 'Malam'),
     ('Dewi Lestari', 'Pagi'),
@@ -153,9 +259,13 @@ VALUES
     ('Linda Kusuma', 'Malam');
 
 INSERT INTO
-    borrowing (loan_duration, book_id, borrower_id, librarian_id)
-VALUES
-    (7, 1, 1, 1),
+    borrowing (
+        loan_duration,
+        book_id,
+        borrower_id,
+        librarian_id
+    )
+VALUES (7, 1, 1, 1),
     (14, 2, 2, 2),
     (7, 3, 3, 3),
     (14, 4, 4, 1),
@@ -170,8 +280,7 @@ VALUES
 
 INSERT INTO
     book_categories (book_id, category_id)
-VALUES
-    (1, 1),
+VALUES (1, 1),
     (1, 9),
     (2, 1),
     (2, 4),

@@ -5,56 +5,85 @@
     title: Libraries System
 ---
 erDiagram
-    book{
-        int id
-        string title
-        string isbn
+    books{
+        serial id
+        varchar(100) title
+        varchar(100) isbn
         int stock
         int bookshelf_id
+        timestamp created_at
+        timestamp updated_at
+        int created_by
+        int updated_by
     }
 
-    category{
-        int id
-        string category_name
+    categories{
+        serial id
+        varchar(100) name
+        timestamp created_at
+        timestamp updated_at
+        int created_by
+        int updated_by
     }
 
-    bookshelf{
-        int id
-        string bookshelf_name
+    bookshelfs{
+        serial id
+        varchar(100) name
         int category_id
+        timestamp created_at
+        timestamp updated_at
+        int created_by
+        int updated_by
     }
 
-    librarian{
-        int id
-        string librarian_name
-        string shift
+    librarians{
+        serial id
+        varchar(100) name
+        enum shift
+        timestamp created_at
+        timestamp updated_at
+        int created_by
+        int updated_by
     }
 
-    borrower{
-        int id
-        string borrower_name
-        string borrower_address
+    borrowers{
+        serial id
+        varchar(100) name
+        varchar(100) address
+        varchar(20) phone
+        timestamp created_at
+        timestamp updated_at
+        int created_by
+        int updated_by
     }
 
     borrowing{
-        int id
+        serial id
         int loan_duration
         int book_id
         int borrower_id
         int librarian_id
+        timestamp created_at
+        timestamp updated_at
+        int created_by
+        int updated_by
     }
 
     book_categories{
-        int id
+        serial id
         int book_id
         int category_id
+        timestamp created_at
+        timestamp updated_at
+        int created_by
+        int updated_by
     }
 
-    librarian ||--|{ borrowing : responsible
-    borrower ||--|{ borrowing : borrow
-    book ||--|{ borrowing : borrowed
-    book ||--|{ book_categories : own
-    category ||--|{ book_categories : owned
-    book }o--|| bookshelf : occupy
-    bookshelf }o--|| category : own
+    librarians ||--|{ borrowing : responsible
+    borrowers ||--|{ borrowing : borrow
+    books ||--|{ borrowing : borrowed
+    books ||--|{ book_categories : own
+    categories ||--|{ book_categories : owned
+    books }o--|| bookshelfs : occupy
+    bookshelfs }o--|| categories : own
 ```
